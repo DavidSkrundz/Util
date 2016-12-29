@@ -8,6 +8,7 @@ import XCTest
 
 XCTMain([
 	testCase(BitCountTests.allTests),
+	testCase(ChunksTests.allTests),
 	testCase(GeneratorTests.allTests),
 	testCase(StringExtensionTests.allTests),
 ])
