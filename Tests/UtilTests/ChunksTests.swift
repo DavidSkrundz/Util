@@ -24,6 +24,14 @@ class ChunksTests: XCTestCase {
 		XCTAssertEqual(array.chunksOf(2)[3], [6])
 	}
 	
+	func testChunkString() {
+		let string = "12345"
+		XCTAssertEqual(string.chunksOf(2).count, 3)
+		XCTAssertEqual(string.chunksOf(2)[0], ["1","2"])
+		XCTAssertEqual(string.chunksOf(2)[1], ["3","4"])
+		XCTAssertEqual(string.chunksOf(2)[2], ["5"])
+	}
+	
 	static var allTests = [
 		("testChunks", testChunks),
 		("testChunksWithLeftovers", testChunksWithLeftovers),
