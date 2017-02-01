@@ -8,7 +8,7 @@ import PackageDescription
 let package = Package(
 	name: "Util",
 	dependencies: [
-		.Package(url: "https://github.com/DavidSkrundz/ProtocolNumbers.git", versions: Version(1,0,0)..<Version(1,1,0)),
+		.Package(url: "https://github.com/DavidSkrundz/ProtocolNumbers.git", majorVersion: 1, minor: 0),
 	]
 )
 
