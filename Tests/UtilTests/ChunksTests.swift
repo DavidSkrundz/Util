@@ -35,5 +35,6 @@ class ChunksTests: XCTestCase {
 	static var allTests = [
 		("testChunks", testChunks),
 		("testChunksWithLeftovers", testChunksWithLeftovers),
+		("testChunkString", testChunkString),
 	]
 }

@@ -22,5 +22,6 @@ class BitCountTests: XCTestCase {
 	static var allTests = [
 		("testZero", testZero),
 		("testIntMax", testIntMax),
+		("testTwoBits", testTwoBits),
 	]
 }
