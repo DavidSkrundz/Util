@@ -12,4 +12,5 @@ XCTMain([
 	testCase(GeneratorTests.allTests),
 	testCase(StringExtensionTests.allTests),
 	testCase(EnumIteratorTests.allTests),
+	testCase(JSONTests.allTests),
 ])
