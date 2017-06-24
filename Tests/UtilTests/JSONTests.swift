@@ -9,32 +9,27 @@ import XCTest
 class JSONTests: XCTestCase {
 	func testSimpleString() {
 		let json = try! JSON(from: "\"string\"")
-		guard case JSON.string(let jsonString) = json else { XCTFail(); return }
-		XCTAssertEqual(jsonString, "string")
+		XCTAssertEqual(json.toString(), "string")
 	}
 	
 	func testUnicodeString() {
 		let json = try! JSON(from: "\"🍁🇨🇦\"")
-		guard case JSON.string(let jsonString) = json else { XCTFail(); return }
-		XCTAssertEqual(jsonString, "🍁🇨🇦")
+		XCTAssertEqual(json.toString(), "🍁🇨🇦")
 	}
 	
 	func testEscapeCharacters() {
 		let json = try! JSON(from: "\"\\\"\\\\\\/\\b\\f\\n\\r\\t\\u2708\"")
-		guard case JSON.string(let jsonString) = json else { XCTFail(); return }
-		XCTAssertEqual(jsonString, "\"\\/\u{8}\u{C}\n\r\t✈")
+		XCTAssertEqual(json.toString(), "\"\\/\u{8}\u{C}\n\r\t✈")
 	}
 	
 	func testInteger() {
 		let json = try! JSON(from: "123")
-		guard case JSON.number(let jsonNumber) = json else { XCTFail(); return }
-		XCTAssertEqual(jsonNumber, 123)
+		XCTAssertEqual(json.toDouble(), 123)
 	}
 	
 	func testNegativeInteger() {
 		let json = try! JSON(from: "-123")
-		guard case JSON.number(let jsonNumber) = json else { XCTFail(); return }
-		XCTAssertEqual(jsonNumber, -123)
+		XCTAssertEqual(json.toDouble(), -123)
 	}
 	
 	func testDouble() {
@@ -45,14 +40,12 @@ class JSONTests: XCTestCase {
 	
 	func testExponentDouble() {
 		let json = try! JSON(from: "1.23E-2")
-		guard case JSON.number(let jsonNumber) = json else { XCTFail(); return }
-		XCTAssertEqual(jsonNumber, 0.0123)
+		XCTAssertEqual(json.toDouble(), 0.0123)
 	}
 	
 	func testBool() {
 		let json = try! JSON(from: "false")
-		guard case JSON.bool(let jsonBool) = json else { XCTFail(); return }
-		XCTAssertEqual(jsonBool, false)
+		XCTAssertEqual(json.toBool(), false)
 	}
 	
 	func testEmptyArray() {
@@ -103,6 +96,27 @@ class JSONTests: XCTestCase {
 		XCTAssertEqual(value, "value")
 	}
 	
+	func testSerializing() {
+		let json = JSON.object([
+			"a" : .object([
+				"g" : .object([:]),
+				"h" : .string(""),
+				"i" : .null,
+			]),
+			"b" : .array([
+				.array([]),
+				.bool(true),
+				.number(10),
+			]),
+			"c" : .string("c"),
+			"d" : .number(2.23),
+			"e" : .bool(false),
+			"f" : .null,
+		])
+		XCTAssertEqual(json.encode(), "{\"a\":{\"g\":{},\"h\":\"\",\"i\":null},\"b\":[[],true,10],\"c\":\"c\",\"d\":2.23,\"e\":false,\"f\":null}")
+		XCTAssertEqual(json.encode(pretty: true), "{\n\t\"a\": {\n\t\t\"g\": {},\n\t\t\"h\": \"\",\n\t\t\"i\": null\n\t},\n\t\"b\": [\n\t\t[],\n\t\ttrue,\n\t\t10\n\t],\n\t\"c\": \"c\",\n\t\"d\": 2.23,\n\t\"e\": false,\n\t\"f\": null\n}")
+	}
+	
 	static var allTests = [
 		("testSimpleString", testSimpleString),
 		("testUnicodeString", testUnicodeString),
@@ -117,5 +131,6 @@ class JSONTests: XCTestCase {
 		("testArray", testArray),
 		("testEmptyObject", testEmptyObject),
 		("testObject", testObject),
+		("testSerializing", testSerializing),
 	]
 }
