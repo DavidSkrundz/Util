@@ -3,7 +3,7 @@
 //  Util
 //
 
-@testable import Util
+import Util
 import XCTest
 
 class StringExtensionTests: XCTestCase {
