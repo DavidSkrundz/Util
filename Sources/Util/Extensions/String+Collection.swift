@@ -10,7 +10,7 @@ extension String {
 		return try self.characters.map(transform)
 	}
 	
-	public func chunksOf(_ size: Int) -> [[Character]] {
-		return self.characters.chunksOf(size)
+	public func chunks(of size: Int) -> [[Character]] {
+		return self.characters.chunks(of: size)
 	}
 }

@@ -20,15 +20,11 @@ public enum JSON {
 	
 	private static func decode(_ string: String) throws -> JSON {
 		var gen = string.generator()
-		self.skipWhitespace(&gen)
+		gen.skipWhitespace()
 		let json = try self.parseValue(&gen)
-		self.skipWhitespace(&gen)
+		gen.skipWhitespace()
 		if gen.hasNext { throw JSONError.InvalidJSON }
 		return json
-	}
-	
-	private static func skipWhitespace(_ gen: inout Generator<String>) {
-		while " \t\n\r\r\n".contains(gen.peek() ?? ".") { gen.advance() }
 	}
 	
 	private static func parseValue(_ gen: inout Generator<String>) throws -> JSON {
@@ -47,22 +43,22 @@ public enum JSON {
 	
 	private static func parseObject(_ gen: inout Generator<String>) throws -> JSON {
 		guard gen.next() == "{" else { throw JSONError.InvalidJSON }
-		self.skipWhitespace(&gen)
+		gen.skipWhitespace()
 		if gen.peek() == "}" {
 			gen.advance()
 			return .object([:])
 		}
 		let kv = try self.parseKV(&gen)
 		var values = [kv.0 : kv.1]
-		self.skipWhitespace(&gen)
+		gen.skipWhitespace()
 		while let next = gen.next() {
 			if next == "}" {
 				return .object(values)
 			} else if next == "," {
-				self.skipWhitespace(&gen)
+				gen.skipWhitespace()
 				let kv = try self.parseKV(&gen)
 				values[kv.0] = kv.1
-				self.skipWhitespace(&gen)
+				gen.skipWhitespace()
 			} else { break }
 		}
 		throw JSONError.InvalidJSON
@@ -72,29 +68,29 @@ public enum JSON {
 		guard case JSON.string(let string) = try self.parseString(&gen) else {
 			throw JSONError.InvalidJSON
 		}
-		self.skipWhitespace(&gen)
+		gen.skipWhitespace()
 		guard gen.next() == ":" else { throw JSONError.InvalidJSON }
-		self.skipWhitespace(&gen)
+		gen.skipWhitespace()
 		let json = try self.parseValue(&gen)
 		return (string, json)
 	}
 	
 	private static func parseArray(_ gen: inout Generator<String>) throws -> JSON {
 		guard gen.next() == "[" else { throw JSONError.InvalidJSON }
-		self.skipWhitespace(&gen)
+		gen.skipWhitespace()
 		if gen.peek() == "]" {
 			gen.advance()
 			return .array([])
 		}
 		var elements = [try self.parseValue(&gen)]
-		self.skipWhitespace(&gen)
+		gen.skipWhitespace()
 		while let next = gen.next() {
 			if next == "]" {
 				return .array(elements)
 			} else if next == "," {
-				self.skipWhitespace(&gen)
+				gen.skipWhitespace()
 				elements.append(try self.parseValue(&gen))
-				self.skipWhitespace(&gen)
+				gen.skipWhitespace()
 			} else { break }
 		}
 		throw JSONError.InvalidJSON

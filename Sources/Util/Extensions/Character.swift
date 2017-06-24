@@ -6,8 +6,7 @@
 extension Character {
 	/// - Returns: The unicode value of `self`
 	public var unicodeValue: Int {
-		let scalars = String(self).unicodeScalars
-		return Int(scalars[scalars.startIndex].value)
+		return Int(String(self).unicodeScalars.first!.value)
 	}
 	
 	/// - Returns: The value of `self` as a hexadecimal digit
@@ -34,6 +33,19 @@ extension Character {
 			default:
 				fatalError("\(self) is not in the English alphabet")
 		}
+	}
+	
+	/// Whitespace characters are defined here as:
+	///
+	/// - `space`
+	/// - `\t`
+	/// - `\n`
+	/// - `\r`
+	/// - `\r\n`
+	///
+	/// - Returns: `true` iff `self` is a whitespace `Character`
+	public var isWhitespace: Bool {
+		return " \t\n\r\r\n".contains(self)
 	}
 	
 	/// - Returns: `true` iff `self` is a digit from `0` to `9`
