@@ -141,10 +141,10 @@ public enum JSON {
 			numericString.append(gen.next()!)
 		} else {
 			guard let firstDigit = gen.next() else { throw JSONError.InvalidJSON }
-			guard ("0"..."9").contains(firstDigit) else { throw JSONError.InvalidJSON }
+			guard ("1"..."9").contains(firstDigit) else { throw JSONError.InvalidJSON }
 			numericString.append(firstDigit)
 			while let next = gen.peek() {
-				if ("0"..."9").contains(next) {
+				if next.isDigit {
 					numericString.append(gen.next()!)
 				} else { break }
 			}
@@ -152,7 +152,7 @@ public enum JSON {
 		if gen.peek() == "." {
 			numericString.append(gen.next()!)
 			while let next = gen.peek() {
-				if ("0"..."9").contains(next) {
+				if next.isDigit {
 					numericString.append(gen.next()!)
 				} else { break }
 			}
@@ -163,7 +163,7 @@ public enum JSON {
 				numericString.append(gen.next()!)
 			}
 			while let next = gen.peek() {
-				if ("0"..."9").contains(next) {
+				if next.isDigit {
 					numericString.append(gen.next()!)
 				} else { break }
 			}
